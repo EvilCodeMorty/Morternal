@@ -16,12 +16,12 @@
         <div>与你同在</div>
         <a href="https://s.apifox.cn/76adbab1-165f-4f18-83e7-f1679ca2aecf" target="_blank"
             rel="noopener noreferrer">API在线文档</a>
-        <div class="change-music" style="font-size: 1rem;">
-            切歌
-        </div>
     </div>
     <div class="music">
         <audio src="./music/852d682f3888457a9aebac14904abe5a.mp3" autoplay loop></audio>
+    </div>
+    <div class="change-music" style="font-size: 1rem;">
+        切换歌曲
     </div>
     <script>
         const musicList = [
@@ -79,8 +79,9 @@
             if (newMusicID === musicId) {
                 audio.currentTime = musicTime;
                 audio.play();
-
             }
+        } else {
+            changeMusicSrc()
         }
         audio.volume = 0.3;
         if (!audio.paused) {
@@ -191,7 +192,6 @@
         font-size: 1rem;
         margin-top: 1rem;
         border-radius: 1px;
-        border: #69bff8 1px solid;
         color: #69bff8;
     }
 
@@ -214,7 +214,7 @@
     }
 
     .change-music {
-        width: 2.25rem;
+        width: 5rem;
         height: 1.25rem;
         border: 1px solid rgba(255, 255, 255, 0.5);
         text-align: center;
@@ -222,6 +222,7 @@
         position: absolute;
         bottom: 1.875rem;
         background-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
     }
 
     audio {

@@ -21,25 +21,50 @@
         </div>
     </div>
     <div class="music">
-        <audio src="./music/凡人-段奥娟.mp3" autoplay loop></audio>
+        <audio src="./music/852d682f3888457a9aebac14904abe5a.mp3" autoplay loop></audio>
     </div>
     <script>
         const musicList = [
-            '不凡-王铮亮',
-            '凡人-段奥娟',
-            '凡心-王铮亮',
-            '归期-钱润玉Runyu',
-            '落英-银临',
-            '少年不凡-刘美麟'
-        ]
+            {
+                music_id: '852d682f3888457a9aebac14904abe5a',
+                music_name: '不凡',
+                music_singer: '王铮亮',
+            },
+            {
+                music_id: 'c6c96f7e77d4409ab9f0ab54d128f745',
+                music_name: '凡人',
+                music_singer: '段奥娟',
+            },
+            {
+                music_id: 'bb012252cbb24d73b3d27ad1eb0f5b2f',
+                music_name: '凡心',
+                music_singer: '王铮亮',
+            },
+            {
+                music_id: '5e958c21d00840b69c4b88f13cd25336',
+                music_name: '归期',
+                music_singer: '钱润玉Runyu',
+            },
+            {
+                music_id: '3864656ec57743fa9687d3633d176739',
+                music_name: '落英',
+                music_singer: '银临',
+            },
+            {
+                music_id: 'c942dd052fb34021bc04ffd8e18faa38',
+                music_name: '少年不凡',
+                music_singer: '刘美麟',
+            },
+        ];
         const changeMusicSrc = () => {
             const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
-            const src = musicList[Math.floor(Math.random() * musicList.length)];
+            const src = musicList[Math.floor(Math.random() * musicList.length)].music_id;
             if (newMusicID === src) {
                 changeMusicSrc()
                 return
             }
             audio.src = `./music/${src}.mp3`
+            audio.currentTime = 0
         }
         const musicPlayData = JSON.parse(localStorage.getItem('musicPlayData'))
         const musicContainer = document.querySelector('.music');
@@ -72,8 +97,8 @@
         audio.addEventListener('timeupdate', function () {
             const duration = audio.duration;
             const currentTime = audio.currentTime;
-            if (duration === currentTime) {
-                changeMusicSrc
+            if (duration - currentTime < 2) {
+                changeMusicSrc();
             }
             const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
             localStorage.setItem('musicPlayData', JSON.stringify({

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./css/base.css">
+    </link>
+    <title>Morternal</title>
+</head>
+
+<body>
+    <div class="container">
+        <p>Morternal</p>
+        <div>与你同在</div>
+        <a href="https://s.apifox.cn/76adbab1-165f-4f18-83e7-f1679ca2aecf" target="_blank"
+            rel="noopener noreferrer">API在线文档</a>
+        <div class="change-music" style="font-size: 1rem;">
+            切歌
+        </div>
+    </div>
+    <div class="music">
+        <audio src="./music/凡人-段奥娟.mp3" autoplay loop></audio>
+    </div>
+    <script>
+        const musicList = [
+            '不凡-王铮亮',
+            '凡人-段奥娟',
+            '凡心-王铮亮',
+            '归期-钱润玉Runyu',
+            '落英-银临',
+            '少年不凡-刘美麟'
+        ]
+        const changeMusicSrc = () => {
+            const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
+            const src = musicList[Math.floor(Math.random() * musicList.length)];
+            if (newMusicID === src) {
+                changeMusicSrc()
+                return
+            }
+            audio.src = `./music/${src}.mp3`
+        }
+        const musicPlayData = JSON.parse(localStorage.getItem('musicPlayData'))
+        const musicContainer = document.querySelector('.music');
+        const audio = document.querySelector('audio');
+        const changeMusic = document.querySelector('.change-music');
+        // 如果存在就同步播放进度;
+        if (musicPlayData) {
+            // 获取当前播放音乐id;
+            const musicId = musicPlayData.music_id;
+            const musicTime = musicPlayData.music_time;
+            const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
+            if (newMusicID === musicId) {
+                audio.currentTime = musicTime;
+                audio.play();
+
+            }
+        }
+        audio.volume = 0.3;
+        if (!audio.paused) {
+            musicContainer.classList.add('musicSpin');
+        }
+        window.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.play();
+                musicContainer.classList.add('musicSpin');
+            }
+        });
+
+        audio.addEventListener('timeupdate', function () {
+            const duration = audio.duration;
+            const currentTime = audio.currentTime;
+            if (duration === currentTime) {
+                changeMusicSrc
+            }
+            const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
+            localStorage.setItem('musicPlayData', JSON.stringify({
+                music_id: String(newMusicID),
+                music_time: String(audio.currentTime)
+            }));
+        });
+        window.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        })
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+        })
+        musicContainer.addEventListener('click', function (e) {
+            const audio = document.querySelector('audio');
+            e.stopPropagation();
+            if (!audio.paused) {
+                audio.pause();
+                musicContainer.classList.remove('musicSpin');
+            } else {
+                audio.play();
+                musicContainer.classList.add('musicSpin');
+            }
+        });
+        changeMusic.addEventListener('click', function (e) {
+            changeMusicSrc()
+        })
+
+    </script>
+</body>
+<style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-image: url(./image/6lkq5l.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: '阿里妈妈东方大楷', sans-serif;
+        overflow: hidden;
+    }
+
+    .container {
+        width: 37.5rem;
+        height: 37.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+        font-size: 2.6875rem;
+        font-weight: 700;
+        font-family: 'Pacifico', sans-serif;
+        overflow: hidden;
+        padding-bottom: 10%;
+    }
+
+    .container>div {
+        font-size: 2.6rem;
+        font-family: '阿里妈妈东方大楷', sans-serif;
+    }
+
+    .container>p {
+        display: block;
+        margin: 0;
+        padding: 0;
+        font-size: 3.3125rem;
+        font-weight: 700;
+    }
+
+    .container>a {
+        display: block;
+        margin: 0;
+        padding: 0;
+        font-family: '阿里妈妈东方大楷', sans-serif;
+        font-size: 1rem;
+        margin-top: 1rem;
+        border-radius: 1px;
+        border: #69bff8 1px solid;
+        color: #69bff8;
+    }
+
+    .music {
+        width: 2.25rem;
+        height: 2.25rem;
+        background-image: url(./image/music.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: transparent;
+        border-radius: 50%;
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+
+    .musicSpin {
+        animation: musicSpin 2s linear infinite;
+    }
+
+    .change-music {
+        width: 2.25rem;
+        height: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        text-align: center;
+        border-radius: 0.25rem;
+        position: absolute;
+        bottom: 1.875rem;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    audio {
+        width: 100%;
+        height: 100%
+    }
+
+    @keyframes musicSpin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+</html>

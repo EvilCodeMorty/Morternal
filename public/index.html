@@ -14,8 +14,7 @@
     <div class="container">
         <p>Morternal</p>
         <div>与你同在</div>
-        <a href="https://s.apifox.cn/76adbab1-165f-4f18-83e7-f1679ca2aecf" target="_blank"
-            rel="noopener noreferrer">API在线文档</a>
+        <a href="" target="_blank" rel="noopener noreferrer">API在线文档</a>
     </div>
     <div class="music">
         <audio autoplay loop></audio>
@@ -55,8 +54,22 @@
                 music_name: '少年不凡',
                 music_singer: '刘美麟',
             },
+            {
+                music_id: '43115a7cb29f16df86dfb3e6ad9c75fd',
+                music_name: '主角',
+                music_singer: '马里奥',
+            },
+            {
+                music_id: '9dfdb983add2537a3334833c29a7d832',
+                music_name: '从别后',
+                music_singer: 'AZA唱团',
+            },
+            {
+                music_id: 'cc25f7629b82b6814c672474d981fac8',
+                music_name: '从别后',
+                music_singer: '流浪的蛙蛙',
+            },
         ];
-        // 切换音乐;
         const changeMusicSrc = () => {
             const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
             const src = musicList[Math.floor(Math.random() * musicList.length)].music_id;
@@ -65,46 +78,43 @@
                 return
             }
             audio.src = `./music/${src}.mp3`
-            // 重置音量;
             audio.volume = 0.3;
-            // 重置音乐进度;
             audio.currentTime = 0
         }
-
         const musicPlayData = JSON.parse(localStorage.getItem('musicPlayData'))
         const musicContainer = document.querySelector('.music');
         const audio = document.querySelector('audio');
         const changeMusic = document.querySelector('.change-music');
-        changeMusicSrc()
-        // 如果存在就同步播放进度;
+        if (musicList.length !== 0) {
+            changeMusicSrc()
+        }
+
         if (musicPlayData) {
-            // 获取当前播放音乐id;
             const musicId = musicPlayData.music_id;
             const musicTime = musicPlayData.music_time;
             const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
             if (newMusicID === musicId) {
                 audio.currentTime = musicTime;
             }
+            audio.volume = 0.3;
             audio.play();
         } else {
             changeMusicSrc()
             audio.play();
             musicContainer.classList.add('musicSpin');
         }
-        //音量;
         audio.volume = 0.3;
         if (!audio.paused) {
             musicContainer.classList.add('musicSpin');
         }
-        //整个页面点击监控,在页面无自动播放时可以点击播放;
         window.addEventListener('click', function (e) {
             e.stopPropagation();
             if (audio.paused) {
+                audio.volume = 0.3;
                 audio.play();
                 musicContainer.classList.add('musicSpin');
             }
         });
-        // 音乐播放监控;
         audio.addEventListener('timeupdate', function (e) {
             const duration = audio.duration;
             const currentTime = audio.currentTime;
@@ -117,7 +127,6 @@
                 music_time: String(audio.currentTime)
             }));
         });
-        // 禁用开发者调试;
         window.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         })
@@ -126,7 +135,6 @@
                 e.preventDefault();
             }
         })
-        //右上角播放状态改变;
         musicContainer.addEventListener('click', function (e) {
             const audio = document.querySelector('audio');
             e.stopPropagation();
@@ -138,11 +146,9 @@
                 musicContainer.classList.add('musicSpin');
             }
         });
-        //切换音乐;
         changeMusic.addEventListener('click', function (e) {
             changeMusicSrc()
         })
-
     </script>
 </body>
 <style>

@@ -2,11 +2,12 @@
 // import { Context } from 'koa';
 import Router from 'koa-router';
 import { Context } from 'koa';
-const router = new Router({ prefix: '/' });
+const router = new Router();
 router.get('/', (ctx: Context) => {
   ctx.redirect('/index.html');
 });
 router.get('/musicList', (ctx: Context) => {
+  ctx.status = 200;
   ctx.body = [
     {
       music_id: '852d682f3888457a9aebac14904abe5a',
@@ -37,6 +38,21 @@ router.get('/musicList', (ctx: Context) => {
       music_id: 'c942dd052fb34021bc04ffd8e18faa38',
       music_name: '少年不凡',
       music_singer: '刘美麟',
+    },
+    {
+      music_id: '43115a7cb29f16df86dfb3e6ad9c75fd',
+      music_name: '主角',
+      music_singer: '马里奥',
+    },
+    {
+      music_id: '9dfdb983add2537a3334833c29a7d832',
+      music_name: '从别后',
+      music_singer: 'AZA唱团',
+    },
+    {
+      music_id: 'cc25f7629b82b6814c672474d981fac8',
+      music_name: '从别后',
+      music_singer: '流浪的蛙蛙',
     },
   ];
 });

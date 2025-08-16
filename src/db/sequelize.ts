@@ -1,11 +1,10 @@
 import { Sequelize } from 'sequelize';
+// 环境变量;
+import { mysqlName, mysqlPassword, mysqlUser, mysqlHost } from '../config/dev.config';
 
-// 读取环境变量;
-const mysqlName = process.env['MYSQL_NAME'] || 'admin';
-const mysqlPassword = process.env['MYSQL_PASSWORD'] || '123456';
 // 创建数据库连接;
-const seq = new Sequelize(mysqlName, 'root', mysqlPassword, {
-  host: 'localhost',
+const seq = new Sequelize(mysqlName, mysqlUser, mysqlPassword, {
+  host: mysqlHost,
   dialect: 'mysql',
 });
 

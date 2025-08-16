@@ -1,0 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+// 主入口环境变量;
+export const appPort = process.env['APP_PORT'] || 3000;
+export const appName = process.env['APP_NAME'] || 'Koa App';
+
+// 数据库环境变量;
+export const mysqlName = process.env['MYSQL_NAME'] || 'admin';
+export const mysqlPassword = process.env['MYSQL_PASSWORD'] || '123456';
+export const mysqlUser = process.env['MYSQL_USER'] || 'root';
+export const mysqlHost = process.env['MYSQL_HOST'] || 'localhost';

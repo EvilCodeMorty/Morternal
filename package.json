@@ -1,5 +1,5 @@
 {
-  "name": "morternal-v2",
+  "name": "morternal",
   "version": "1.0.0",
   "description": "Morternal — The Future Never Dies.",
   "license": "MIT",
@@ -24,7 +24,8 @@
   "devDependencies": {
     "@types/koa-router": "^7.4.8",
     "@types/koa-static": "^4.0.4",
-    "@types/node": "^24.2.1"
+    "@types/node": "^24.2.1",
+    "rimraf": "^6.0.1"
   },
   "dependencies": {
     "@koa/router": "^14.0.0",

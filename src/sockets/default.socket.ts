@@ -13,7 +13,10 @@ const createSocketServer = function (appServer: http.Server) {
   // 创建socket连接;
   io.on('connect', (socket) => {
     socket.on('disconnect', () => {
-      console.log('socket disconnect');
+      console.log('有新的连接!');
+    });
+    socket.on('error', (err) => {
+      console.log('socket出错了!', err);
     });
   });
   return io;

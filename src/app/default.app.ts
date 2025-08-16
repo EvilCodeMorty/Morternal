@@ -1,9 +1,12 @@
 // 业务主入口;
+// 第三方包导入;
 import Koa from 'koa';
 import { koaBody } from 'koa-body';
 import serve from 'koa-static';
+//系统导入;
 import path from 'path';
 import { fileURLToPath } from 'url';
+// 自定义文件导入;
 import defaultRoute from '../routes/default.route.js';
 import userErrorHandler from './user.error.handler.js';
 import systemErrorHandler from './system.error.handler.js';
@@ -14,6 +17,7 @@ const staticDir = path.join(__dirname, '../../public');
 const app = new Koa();
 // 开启信任代理头;
 app.proxy = true;
+// 静态资源服务配置;
 app.use(
   serve(staticDir, {
     maxage: 1000 * 60 * 60 * 24 * 30,

@@ -10,32 +10,17 @@ import { fileURLToPath } from 'url';
 // 自定义模块导入;
 import defaultRoute from '../routes/default.route.js';
 import userRoute from '../routes/user.route.js';
+import defaultErrorHandler from './default.error.handler.js';
 import userErrorHandler from './user.error.handler.js';
 import systemErrorHandler from './system.error.handler.js';
 // 解决 __dirname 不存在
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = new Koa();
-// 全局错误处理;
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch (error) {
-    const err = error as { isOperational?: boolean };
-    console.error('捕获异常:', error);
-    ctx.status = 500;
-    ctx.body = { code: 500, message: '服务器内部错误', result: '' };
-    if (err.isOperational) {
-      app.emit('userError', error, ctx);
-    } else {
-      app.emit('systemError', error, ctx);
-    }
-  }
-});
-
+// 全局错误处理(用于捕获全局在未使用trycatch时抛出的错误);
+app.use(defaultErrorHandler);
 // 开启信任代理头;
 app.proxy = true;
-
 // 配置koaBody;
 app.use(koaBody());
 // 挂载路由;

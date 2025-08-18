@@ -4,13 +4,28 @@ import { Context, Next } from 'koa';
 const defaultErrorHandler = async (ctx: Context, next: Next) => {
   try {
     await next();
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('捕获异常:', error);
+    let message: string;
     ctx.status = 500;
     // 出现全局错误一律响应500;
     ctx.body = { code: 500, message: '系统繁忙，请稍后再试!', result: '' };
     // 上报到系统错误处理;
-    ctx.app.emit('systemError', error, ctx);
+    if (error instanceof Error) {
+      message = error.message;
+    } else if (typeof error === 'string') {
+      message = error;
+    } else {
+      message = '未知错误';
+    }
+    const errorData = {
+      status: 500,
+      code: 100001,
+      message: message,
+      result: '',
+    };
+    console.log(errorData);
+    ctx.app.emit('systemError', errorData, ctx);
   }
 };
 export default defaultErrorHandler;

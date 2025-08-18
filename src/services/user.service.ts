@@ -16,7 +16,6 @@ class UserService {
       user_password,
       nick_name,
     });
-    console.log(res);
     return res.dataValues;
   }
 }

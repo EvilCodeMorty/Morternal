@@ -10,7 +10,7 @@ const UserModel = seq.define('morternal_user', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-    comment: '用户唯一id,不能为空,唯一;',
+    comment: '用户唯一id,主键,不能为空,唯一;',
   },
   //用户名-展示用;
   nick_name: {
@@ -32,6 +32,8 @@ const UserModel = seq.define('morternal_user', {
     comment: '用户密码,不能为空;',
   },
 });
-// 模型同步,创建表;
+// 模型同步,保留原数据重新创建表;
 // UserModel.sync();
+// 模型同步,删除所有数据重新创建表;
+// UserModel.sync({ force: true });
 export default UserModel;

@@ -8,8 +8,14 @@ class UserController {
     try {
       const { user_name, user_password } = ctx.request.body;
       const res = await userService.createUser({ user_name, user_password });
-      console.log(res);
-      throw new Error('用户已存在');
+      if (res) {
+        ctx.body = {
+          code: 200,
+          message: '用户注册成功',
+        };
+        return;
+      }
+      ctx.app.emit('userError', '注册失败', ctx);
     } catch (error) {}
   }
 }

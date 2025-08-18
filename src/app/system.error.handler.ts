@@ -1,12 +1,7 @@
 // 系统错误统一处理;
 import { Context } from 'koa';
-type Error = {
-  code: number;
-  status: number;
-  message: string;
-  result: null | string | object;
-};
-const systemErrorHandler = (error: Error, ctx: Context) => {
+import { ErrorType } from '../constants/user.error.type.js';
+const systemErrorHandler = (error: ErrorType, ctx: Context) => {
   try {
     //在监控到系统问题时对用户进行统一错误提示;
     ctx.status = 500;

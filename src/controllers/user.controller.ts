@@ -8,6 +8,8 @@ class UserController {
     try {
       const { user_name, user_password } = ctx.request.body;
       const res = await userService.createUser({ user_name, user_password });
+      console.log(res);
+      throw new Error('用户已存在');
     } catch (error) {}
   }
 }

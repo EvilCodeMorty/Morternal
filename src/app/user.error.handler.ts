@@ -2,13 +2,14 @@
 import { Context } from 'koa';
 
 import { ErrorType } from '../constants/user.error.type.js';
+import { systemError } from '../constants/default.error.type.js';
 const userErrorHandler = (error: ErrorType, ctx: Context) => {
   try {
-    ctx.status = error.status || 500;
+    ctx.status = error.status || systemError.status;
     ctx.body = {
-      code: error.code || 123456,
-      message: error.message || '系统繁忙，请稍后再试!',
-      result: error.result || null,
+      code: error.code || systemError.code,
+      message: error.message || systemError.message,
+      result: error.result || systemError.result,
     };
   } catch (error) {
     // 在处理错误时出错就调用系统错误处理;

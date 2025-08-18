@@ -18,6 +18,16 @@ class UserService {
     });
     return res.dataValues;
   }
+  // 查询用户;
+  async queryUser(params: { user_name: string }) {
+    const { user_name } = params;
+    const res = await UserModel.findOne({
+      where: {
+        user_name,
+      },
+    });
+    return res?.dataValues || null;
+  }
 }
 const userService = new UserService();
 export default userService;

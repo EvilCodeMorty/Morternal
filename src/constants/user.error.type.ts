@@ -49,3 +49,17 @@ export const userAlreadyExited: ErrorType = {
   message: '用户已存在',
   result: '',
 };
+// 注册成功;
+export const userRegisterSuccess: ErrorType = {
+  status: 200,
+  code: 20007,
+  message: '注册成功',
+  result: '',
+};
+// 用户不存在;
+export const userNotExited: ErrorType = {
+  status: 400,
+  code: 20008,
+  message: '用户不存在',
+  result: '',
+};

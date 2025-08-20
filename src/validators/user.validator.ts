@@ -6,6 +6,7 @@ import {
   userNameFormatError,
   passwordFormatError,
   userAlreadyExited,
+  userNotExited,
 } from '../constants/user.error.type.js';
 import { stringValidator, emailValidator, passwordValidator } from './default.validator.js';
 import userService from '../services/user.service.js';
@@ -37,9 +38,20 @@ export const userRegisterParameterValidator = async (ctx: Context, next: Next) =
   }
   //查询用户是否已存在;
   const res = await userService.queryUser({ user_name: user_name });
-  if (res) {
-    ctx.app.emit('userError', userAlreadyExited, ctx);
-    return;
+  // 根据接口地址判断是否需要验证用户名已注册;
+  // 注册接口;
+  if (ctx.request.path === '/user/register') {
+    if (res) {
+      ctx.app.emit('userError', userAlreadyExited, ctx);
+      return;
+    }
+  }
+  // 登录接口;
+  if (ctx.request.path === '/user/login') {
+    if (!res) {
+      ctx.app.emit('userError', userNotExited, ctx);
+      return;
+    }
   }
   await next();
 };

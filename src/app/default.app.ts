@@ -4,18 +4,15 @@
 import Koa from 'koa';
 import { koaBody } from 'koa-body';
 import serve from 'koa-static';
-// 底层模块导入;
-import path from 'path';
-import { fileURLToPath } from 'url';
+
 // 自定义模块导入;
+import { nodeEnv } from '../config/dev.config.js';
+import pathDir from '../utils/pathDir.js';
 import defaultRoute from '../routes/default.route.js';
 import userRoute from '../routes/user.route.js';
 import defaultErrorHandler from './default.error.handler.js';
 import userErrorHandler from './user.error.handler.js';
 import systemErrorHandler from './system.error.handler.js';
-// 解决 __dirname 不存在
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const app = new Koa();
 // 全局错误处理(用于捕获全局在未使用trycatch时抛出的错误);
 app.use(defaultErrorHandler);
@@ -23,12 +20,13 @@ app.use(defaultErrorHandler);
 app.proxy = true;
 // 配置koaBody;
 app.use(koaBody());
+
 // 挂载路由;
 app.use(defaultRoute.routes()).use(defaultRoute.allowedMethods());
 app.use(userRoute.routes()).use(userRoute.allowedMethods());
 // 静态资源服务配置;
 app.use(
-  serve(path.join(__dirname, '../../public'), {
+  serve(pathDir, {
     // 缓存7天;
     maxage: 1000 * 60 * 60 * 24 * 7,
   }),
@@ -38,7 +36,13 @@ app.use(async (ctx, next) => {
   await next();
   // 如果响应状态为404，且不是静态资源，则重定向到首页;
   if (ctx.status === 404) {
-    ctx.redirect('/index.html');
+    // 开发环境;
+    if (nodeEnv === 'development') {
+      ctx.redirect('/index.html');
+      return;
+    }
+    // 生产环境;
+    ctx.redirect('/api/index.html');
   }
 });
 // 忽略连接重置错误;

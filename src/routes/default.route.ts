@@ -1,11 +1,23 @@
 // 默认路由;
 // import { Context } from 'koa';
+
 import Router from 'koa-router';
 import { Context } from 'koa';
+import { nodeEnv } from '../config/dev.config.js';
 const router = new Router();
 router.get('/', (ctx: Context) => {
-  ctx.redirect('/index.html');
+  console.log('nodeEnv', nodeEnv);
+  // 开发环境;
+  if (nodeEnv === 'development') {
+    ctx.status = 200;
+    ctx.redirect('/index.html');
+    return;
+  }
+  // 生产环境;
+  ctx.status = 200;
+  ctx.redirect('/api/index.html');
 });
+
 router.get('/musicList', (ctx: Context) => {
   ctx.status = 200;
   ctx.body = [

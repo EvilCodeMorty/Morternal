@@ -9,3 +9,4 @@ export const mysqlName = process.env['MYSQL_NAME'] || 'admin';
 export const mysqlPassword = process.env['MYSQL_PASSWORD'] || '123456';
 export const mysqlUser = process.env['MYSQL_USER'] || 'root';
 export const mysqlHost = process.env['MYSQL_HOST'] || 'localhost';
+export const nodeEnv = process.env['NODE_ENV'] || 'null';

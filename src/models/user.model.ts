@@ -1,7 +1,7 @@
 // 用户数据库模型;
 import { DataTypes } from 'sequelize';
 
-import seq from '../db/sequelize';
+import seq from '../db/sequelize.js';
 
 // 用户模型;
 const UserModel = seq.define('morternal_user', {

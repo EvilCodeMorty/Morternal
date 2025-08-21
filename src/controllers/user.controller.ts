@@ -28,10 +28,10 @@ class UserController {
     }
   }
   // 用户登录控制器;
-  async login(ctx: Context) {
-    try {
-    } catch (error) {}
-  }
+  // async login(ctx: Context) {
+  //   try {
+  //   } catch (error) {}
+  // }
 }
 const userController = new UserController();
 export default userController;

@@ -1,15 +1,14 @@
 // 业务主入口;
 // 第三方模块导入;
-
 import Koa from 'koa';
-import { koaBody } from 'koa-body';
+import bodyParser from '@koa/bodyparser';
 import serve from 'koa-static';
-
 // 自定义模块导入;
 import { nodeEnv } from '../config/dev.config.js';
-import pathDir from '../utils/pathDir.js';
+import { publicPathDir } from '../utils/pathDir.js';
 import defaultRoute from '../routes/default.route.js';
 import userRoute from '../routes/user.route.js';
+import uploadRoute from '../routes/upload.route.js';
 import defaultErrorHandler from './default.error.handler.js';
 import userErrorHandler from './user.error.handler.js';
 import systemErrorHandler from './system.error.handler.js';
@@ -19,14 +18,15 @@ app.use(defaultErrorHandler);
 // 开启信任代理头;
 app.proxy = true;
 // 配置koaBody;
-app.use(koaBody());
+app.use(bodyParser());
 
 // 挂载路由;
 app.use(defaultRoute.routes()).use(defaultRoute.allowedMethods());
 app.use(userRoute.routes()).use(userRoute.allowedMethods());
+app.use(uploadRoute.routes()).use(uploadRoute.allowedMethods());
 // 静态资源服务配置;
 app.use(
-  serve(pathDir, {
+  serve(publicPathDir, {
     // 缓存7天;
     maxage: 1000 * 60 * 60 * 24 * 7,
   }),

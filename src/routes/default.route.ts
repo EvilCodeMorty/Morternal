@@ -1,12 +1,11 @@
 // 默认路由;
 // import { Context } from 'koa';
 
-import Router from 'koa-router';
+import Router from '@koa/router';
 import { Context } from 'koa';
 import { nodeEnv } from '../config/dev.config.js';
 const router = new Router();
 router.get('/', (ctx: Context) => {
-  console.log('nodeEnv', nodeEnv);
   // 开发环境;
   if (nodeEnv === 'development') {
     ctx.status = 200;

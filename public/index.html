@@ -5,128 +5,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="./css/base.css">
-    </link>
     <title>Morternal</title>
 </head>
 
 <body>
+    <div class="music paused">
+        <audio src="./LowRoar-Don'tBeSoSerious.mp3" autoplay loop preload="auto"></audio>
+    </div>
     <div class="container">
-        <p>Morternal</p>
-        <div>与你同在</div>
-        <a href="" target="_blank" rel="noopener noreferrer">API在线文档</a>
-    </div>
-    <div class="music">
-        <audio autoplay loop></audio>
-    </div>
-    <div class="change-music" style="font-size: 1rem;">
-        切换歌曲
+        <div class="container-text">
+            Morternal
+        </div>
+        <div class="container-text-2">
+            与你同在
+        </div>
+        <div class="container-text-3">
+            <a href="https://evilcodemorty.com/api" target="_blank" rel="noopener noreferrer">API在线文档</a>
+        </div>
     </div>
     <script>
-        const musicList = [
-            {
-                music_id: '852d682f3888457a9aebac14904abe5a',
-                music_name: '不凡',
-                music_singer: '王铮亮',
-            },
-            {
-                music_id: 'c6c96f7e77d4409ab9f0ab54d128f745',
-                music_name: '凡人',
-                music_singer: '段奥娟',
-            },
-            {
-                music_id: 'bb012252cbb24d73b3d27ad1eb0f5b2f',
-                music_name: '凡心',
-                music_singer: '王铮亮',
-            },
-            {
-                music_id: '5e958c21d00840b69c4b88f13cd25336',
-                music_name: '归期',
-                music_singer: '钱润玉Runyu',
-            },
-            {
-                music_id: '3864656ec57743fa9687d3633d176739',
-                music_name: '落英',
-                music_singer: '银临',
-            },
-            {
-                music_id: 'c942dd052fb34021bc04ffd8e18faa38',
-                music_name: '少年不凡',
-                music_singer: '刘美麟',
-            },
-            {
-                music_id: '43115a7cb29f16df86dfb3e6ad9c75fd',
-                music_name: '主角',
-                music_singer: '马里奥',
-            },
-            {
-                music_id: '9dfdb983add2537a3334833c29a7d832',
-                music_name: '从别后',
-                music_singer: 'AZA唱团',
-            },
-            {
-                music_id: 'cc25f7629b82b6814c672474d981fac8',
-                music_name: '从别后',
-                music_singer: '流浪的蛙蛙',
-            },
-        ];
-        const changeMusicSrc = () => {
-            const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
-            const src = musicList[Math.floor(Math.random() * musicList.length)].music_id;
-            if (newMusicID === src) {
-                changeMusicSrc()
-                return
-            }
-            audio.src = `./music/${src}.mp3`
-            audio.volume = 0.3;
-            audio.currentTime = 0
-        }
-        const musicPlayData = JSON.parse(localStorage.getItem('musicPlayData'))
-        const musicContainer = document.querySelector('.music');
         const audio = document.querySelector('audio');
-        const changeMusic = document.querySelector('.change-music');
-        if (musicList.length !== 0) {
-            changeMusicSrc()
+        const audioTime = localStorage.getItem('audioTime');
+        const audioContainer = document.querySelector('.music');
+        if (audioTime) {
+            audio.currentTime = audioTime;
         }
-
-        if (musicPlayData) {
-            const musicId = musicPlayData.music_id;
-            const musicTime = musicPlayData.music_time;
-            const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
-            if (newMusicID === musicId) {
-                audio.currentTime = musicTime;
-            }
-            audio.volume = 0.3;
-            audio.play();
-        } else {
-            changeMusicSrc()
-            audio.play();
-            musicContainer.classList.add('musicSpin');
+        if (!audio.paused) {
+            audioContainer.classList.remove('paused');
+            audioContainer.classList.add('playing');
         }
         audio.volume = 0.3;
-        if (!audio.paused) {
-            musicContainer.classList.add('musicSpin');
-        }
-        window.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (audio.paused) {
-                audio.volume = 0.3;
-                audio.play();
-                musicContainer.classList.add('musicSpin');
-            }
-        });
         audio.addEventListener('timeupdate', function (e) {
-            const duration = audio.duration;
-            const currentTime = audio.currentTime;
-            if (duration - currentTime < 2) {
-                changeMusicSrc();
-            }
-            const newMusicID = decodeURIComponent(audio.src.split('/').pop().split('.')[0])
-            localStorage.setItem('musicPlayData', JSON.stringify({
-                music_id: String(newMusicID),
-                music_time: String(audio.currentTime)
-            }));
+            localStorage.setItem('audioTime', audio.currentTime);
         });
+        audioContainer.addEventListener('click', function (e) {
+            if (!audio.paused) {
+                audio.pause();
+                audioContainer.classList.remove('playing');
+                audioContainer.classList.add('paused');
+                return;
+            }
+            audio.play();
+            audioContainer.classList.remove('paused');
+            audioContainer.classList.add('playing');
+        });
+        window.addEventListener('click', function (e) {
+            if (e.target.tagName === 'DIV') { return }
+            audioContainer.classList.remove('paused');
+            audioContainer.classList.add('playing');
+            audio.play();
+        })
         window.addEventListener('contextmenu', function (e) {
             e.preventDefault();
         })
@@ -135,20 +63,6 @@
                 e.preventDefault();
             }
         })
-        musicContainer.addEventListener('click', function (e) {
-            const audio = document.querySelector('audio');
-            e.stopPropagation();
-            if (!audio.paused) {
-                audio.pause();
-                musicContainer.classList.remove('musicSpin');
-            } else {
-                audio.play();
-                musicContainer.classList.add('musicSpin');
-            }
-        });
-        changeMusic.addEventListener('click', function (e) {
-            changeMusicSrc()
-        })
     </script>
 </body>
 <style>
@@ -156,100 +70,120 @@
     body {
         width: 100%;
         height: 100%;
-        margin: 0;
-        padding: 0;
-        background-image: url(./image/6lkq5l.png);
+        background-image: url('./6lkq5l.png');
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
-        background-color: #000;
+        overflow: hidden;
+        cursor: url('./normal.cur'), auto;
         display: flex;
         justify-content: center;
         align-items: center;
         font-family: '阿里妈妈东方大楷', sans-serif;
-        overflow: hidden;
-    }
 
-    .container {
-        width: 37.5rem;
-        height: 37.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        color: transparent;
-        font-size: 2.6875rem;
-        font-weight: 700;
-        font-family: 'Pacifico', sans-serif;
-        overflow: hidden;
-        padding-bottom: 10%;
-    }
-
-    .container>div {
-        font-size: 2.6rem;
-        font-family: '阿里妈妈东方大楷', sans-serif;
-    }
-
-    .container>p {
-        display: block;
-        margin: 0;
-        padding: 0;
-        font-size: 3.3125rem;
-        font-weight: 700;
-    }
-
-    .container>a {
-        display: block;
-        margin: 0;
-        padding: 0;
-        font-family: '阿里妈妈东方大楷', sans-serif;
-        font-size: 1rem;
-        margin-top: 1rem;
-        border-radius: 1px;
-        color: #69bff8;
     }
 
     .music {
         width: 2.25rem;
         height: 2.25rem;
-        background-image: url(./image/music.png);
+        background-image: url('./music.png');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
-        background-color: transparent;
-        border-radius: 50%;
-        position: absolute;
+        position: fixed;
         top: 1.5rem;
         right: 1.5rem;
+        animation: rotate 5s linear infinite;
     }
 
-    .musicSpin {
-        animation: musicSpin 2s linear infinite;
-    }
-
-    .change-music {
-        width: 5rem;
-        height: 1.25rem;
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        text-align: center;
-        border-radius: 0.25rem;
-        position: absolute;
-        bottom: 1.875rem;
-        background-color: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.5);
-    }
-
-    audio {
+    .container {
         width: 100%;
-        height: 100%
+        margin-top: -5rem;
+        background: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
     }
 
-    @keyframes musicSpin {
+    .container-text {
+        font-family: 'Pacifico', sans-serif;
+
+        font-size: 3.5rem;
+        font-weight: 700;
+        font-family: 'Pacifico', sans-serif;
+        overflow: hidden;
+        padding-bottom: 1rem;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+
+
+    }
+
+    .container-text-2 {
+        font-family: '阿里妈妈东方大楷', sans-serif;
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin-top: -2rem;
+        overflow: hidden;
+        text-align: center;
+
+    }
+
+    .container-text-3 {
+        font-family: '阿里妈妈东方大楷', sans-serif;
+        font-size: 1rem;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+        a {
+
+            text-decoration: none;
+        }
+    }
+
+    a,
+    button,
+    img {
+        cursor: url('./link.cur'), pointer;
+    }
+
+    input,
+    textarea {
+        cursor: url('./text.cur'), text;
+    }
+
+    /* 全局默认字体; */
+    @font-face {
+        font-family: '阿里妈妈东方大楷';
+        src: url('./阿里妈妈东方大楷.ttf') format('truetype');
+        font-weight: normal;
+    }
+
+    /* 英文连笔; */
+    @font-face {
+        font-family: 'Pacifico';
+        src: url('./Pacifico.ttf') format('truetype');
+    }
+
+    /* LED字体; */
+    @font-face {
+        font-family: 'UnidreamLED';
+        src: url('./UnidreamLED.ttf') format('truetype');
+    }
+
+    /* 暂停 */
+    .paused {
+        animation-play-state: paused;
+    }
+
+    /* 恢复 */
+    .playing {
+        animation-play-state: running;
+    }
+
+    @keyframes rotate {
         0% {
             transform: rotate(0deg);
         }

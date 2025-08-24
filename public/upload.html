@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>Morternal</title>
+</head>
+
+<body>
+    <div class="container light-background">
+        <div class="upload-icon">
+            <input type="file" name="" id="upload-input">
+        </div>
+    </div>
+    <script>
+        const uploadIcon = document.querySelector('.upload-icon');
+        const uploadInput = document.querySelector('#upload-input');
+        uploadInput.addEventListener('change', (e) => {
+            // 获取文件
+            const file = e.target.files[0];
+            async function uploadFile(file) {
+                const formData = new FormData();
+                formData.append('file', file);
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.code === 20007) {
+                    alert('上传成功');
+                } else {
+                    alert('上传失败');
+                }
+            }
+
+
+
+
+
+
+        });
+    </script>
+</body>
+<style>
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        background-image: url('./6lkq5l.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .container {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .upload-icon {
+        width: 100%;
+        height: 100%;
+        font-size: 120px;
+        color: #fff;
+        opacity: 0.66;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: '阿里妈妈东方大楷', sans-serif;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .upload-icon>input {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+
+    }
+
+    /* 浅色背景 磨砂玻璃; */
+    .light-background {
+        background: rgba(255, 255, 255, 0.3);
+        /* 白色 + 低透明 */
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-radius: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        /* 亮边描边 */
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+        /* 高级感阴影 */
+        color: #333;
+        /* 保证内容对比度 */
+    }
+
+    /* 深色背景 磨砂玻璃; */
+    .dark-background {
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+    }
+
+    /* 圆润字体; */
+    @font-face {
+        font-family: 'Mellow';
+        src: url('./mellow.ttf') format('truetype');
+    }
+
+    @font-face {
+        font-family: '阿里妈妈东方大楷';
+        src: url('./阿里妈妈东方大楷.ttf') format('truetype');
+    }
+</style>
+
+</html>

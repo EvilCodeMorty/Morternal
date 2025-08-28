@@ -67,5 +67,12 @@ router.get('/musicList', (ctx: Context) => {
     },
   ];
 });
+// 测试路由;
+router.get('/test', (ctx: Context) => {
+  ctx.status = 200;
+  ctx.body = {
+    message: '测试路由',
+  };
+});
 
 export default router;

@@ -1,13 +1,32 @@
 // @koa/multer的配置文件;
 import multer from '@koa/multer';
+import type { File } from '@koa/multer';
 import uuid from '../utils/uuid.js';
-import { uploadPathDir } from '../utils/pathDir.js';
+import { imagePathDir, defaultPathDir, musicPathDir } from '../utils/pathDir.js';
 import { fileFilter } from '../validators/file.validator.js';
+import { imagesType, musicType } from '../config/type.config.js';
+
+//按照文件后缀放到对应文件夹中;
+const fileClassifyPath = (file: File) => {
+  // 默认文件保存文件夹;
+  let filePath = defaultPathDir;
+  // 获取文件的后缀名;
+  const fileType = file.originalname.substring(file.originalname.lastIndexOf('.') + 1);
+  // 图片文件格式
+  if (imagesType.includes(fileType)) {
+    filePath = imagePathDir;
+  }
+  // 音乐文件格式;
+  if (musicType.includes(fileType)) {
+    filePath = musicPathDir;
+  }
+  return filePath;
+};
 // 配置存储位置和文件名;
 const storage = multer.diskStorage({
   // 存储位置;
   destination: function (req, file, cb) {
-    cb(null, uploadPathDir);
+    cb(null, fileClassifyPath(file));
   },
   // 文件名;
   filename: function (req, file, cb) {
